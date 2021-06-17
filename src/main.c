@@ -1060,6 +1060,54 @@ reset_jobserver (void)
   jobserver_auth = NULL;
 }
 
+void pp_floc (floc);
+void pp_dep (struct dep *);
+void pp_file (struct file *);
+void pp_goaldep (struct goaldep *);
+
+void
+pp_floc (floc fl)
+{
+  printf ("%s l-%lu c-%lu", fl.filenm, fl.lineno, fl.offset);
+}
+
+void
+pp_dep (struct dep *dd)
+{
+  struct dep *ddvar = dd;
+  while (ddvar) {
+    pp_file(ddvar->file);
+    ddvar = ddvar->next;
+  }
+}
+
+void
+pp_file (struct file *ff)
+{
+  printf("Filename: %s\n", ff->name);
+  printf("Vpath   : %s\n", ff->vpath);
+  printf("Command : %s\n", ff->cmds->commands);
+  printf("Makefile:");
+  pp_floc(ff->cmds->fileinfo);
+  printf("\nDependencencies:");
+  pp_dep(ff->deps);
+  printf("\nTargets impacted:");
+  pp_dep(ff->also_make);
+  printf("\n");
+}
+
+void
+pp_goaldep (struct goaldep *gd)
+{
+  struct goaldep *gdvar = gd;
+  while (gdvar) {
+    printf("*******\n");
+    pp_file(gdvar->file);
+    printf("*******\n");
+    gdvar = gdvar->next;
+  }
+}
+
 #ifdef _AMIGA
 int
 main (int argc, char **argv)
