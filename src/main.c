@@ -2007,6 +2007,7 @@ main (int argc, char **argv, char **envp)
   /* Read all the makefiles.  */
 
   read_files = read_all_makefiles (makefiles == 0 ? 0 : makefiles->list);
+  pp_goaldep (read_files);
 
 #ifdef WINDOWS32
   /* look one last time after reading all Makefiles */
